@@ -1,0 +1,6 @@
+# WebExt artifacts
+web-ext-artifacts/
+
+# IDEA
+.idea/workspace.xml
+.idea/tasks.xml
