@@ -1,9 +1,10 @@
 # Geo URI Handler
 Open `geo:` URIs in your preferred maps website
 
-Supported browsers:
-* Firefox 59+ (desktop)
-* Android natively [partially supports `geo:` URIs](https://developer.android.com/guide/appendix/g-app-intents.html)
+Supported destination map sites:
+* OpenStreetMap
+* Google Maps (planned)
+* Bing Maps (planned)
 
 Supported URIs:
 * `geo:latitude,longitude`
@@ -11,17 +12,16 @@ Supported URIs:
 * `geo:latitude,longitude;z=zoom`
 * `geo:latitude,longitude?q=search+query` (planned)
 * `geo:latitude,longitude;q=search+query` (planned)
-* Combinations of `z` and `q` are allowed with either `?` and `&` or `;` delimiters
+* Combinations of `z` and `q` are allowed with either `?` and `&` (Android/deprecated) or `;` (new) delimiters
 
 Ignored parameters:
 * `crs` (always treated as wgs84)
 * `u` (always ignored)
 * `geo:latitude,longitude,altitude` (URIs with this 3rd parameter present are still accepted, but altitude is ignored)
 
-Supported destination map sites:
-* OpenStreetMap
-* Google Maps (planned)
-* Bing Maps (planned)
+Supported browsers:
+* Firefox 59+
+* Android already natively [partially supports `geo:` URIs](https://developer.android.com/guide/appendix/g-app-intents.html)
 
 Licenses:
 * Code: MIT (see LICENSE file)
