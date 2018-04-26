@@ -22,7 +22,8 @@
 function GeoLocation () {
     this.latitude = 0.0;
     this.longitude = 0.0;
-    this.zoom = 0.0;
+    this.zoom = null;
+    this.searchQuery = null;
 }
 GeoLocation.fromUri = function (uri) { return GeoUri.parse(uri); };
 GeoLocation.prototype.toOpenStreetMapUrl = function () { return GeoUri.toOpenStreetMapUrl(this); };
@@ -30,6 +31,7 @@ GeoLocation.prototype.toOpenStreetMapUrl = function () { return GeoUri.toOpenStr
 const GeoUri = {
     GEO_URI_PREFIX: 'geo:',
     LAT_LNG_SEPARATOR: ',',
+    DEFAULT_ZOOM: 12,
     /** Supports both Android/deprecated ? and & separators and finalized ; separator */
     PARAMETER_SEPARATOR: /[?&;]/g,
     PARAMETER_VALUE_SEPARATOR: '=',
@@ -38,19 +40,24 @@ const GeoUri = {
     parse: function (uri) {
         if (!uri.startsWith(this.GEO_URI_PREFIX)) throw 'Not a "geo:" URI: ' + uri;
 
-        // Assuming an example URI of "geo:17.65,-30.43?z=4.3"
-        // Parse out "geo:" scheme
-        uri = uri.replace(this.GEO_URI_PREFIX, '');
+        // Assuming an example URI of "geo:17.65,-30.43?z=4.3&q=local+business"
+        // Strip out "geo:" scheme
+        const uriContents = uri.substr(this.GEO_URI_PREFIX.length);
 
         // uri is now "17.65,-30.43?z=4.3"
         // Split out the coordinates from the parameters
-        const [rawLatLng, ...rawParameters] = uri.split(this.PARAMETER_SEPARATOR);
+        const [rawLatLng, ...rawParameters] = uriContents.split(this.PARAMETER_SEPARATOR);
+
+        // rawLatLng is "17.65,-30.43", rawParameters is ["z=4.3", "q=local+business"]
         const [latitude, longitude] = rawLatLng.split(this.LAT_LNG_SEPARATOR).map(Number);
 
-        // Split out parameters into a Map
+        // Generate a key/value array for each parameter (initializes map), while decoding components (incl. +)
+        // For our example URI, looks like: {"z": "4.3", "q": "local business"}
         const parameters = new Map(
             rawParameters.map((rawParameter) =>
-                rawParameter.split(this.PARAMETER_VALUE_SEPARATOR).map(decodeURIComponent))
+                rawParameter.split(this.PARAMETER_VALUE_SEPARATOR) // "q=local+business" => ["q", "local+business"]
+                    .map((s) => s.replace(/\+/g, '%20')) // ["q", "local+business"] => ["q", "local%20business"]
+                    .map(decodeURIComponent)) // ["q", "local%20business"] => ["q", "local business"]
         );
 
         // Set up and return GeoLocation object
@@ -58,13 +65,18 @@ const GeoUri = {
         geoLocation.latitude = latitude;
         geoLocation.longitude = longitude;
         if (parameters.has('z')) geoLocation.zoom = Number(parameters.get('z'));
+        if (parameters.has('q')) geoLocation.searchQuery = parameters.get('q');
 
         return geoLocation;
     },
 
     /** Takes a {@type GeoLocation} object and returns an OpenStreetMap URL */
     toOpenStreetMapUrl: function (geoLocation) {
-        return 'https://www.openstreetmap.org/#map=' + Math.round(geoLocation.zoom) + '/' +
+        return 'https://www.openstreetmap.org/' + // base URL
+            (geoLocation.searchQuery !== null ? // search query
+                'search?query=' + encodeURIComponent(geoLocation.searchQuery) : '') +
+            '#map=' + // map location (lat,lng,zoom)
+            (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM) + '/' +
             geoLocation.latitude.toFixed(5) + '/' + geoLocation.longitude.toFixed(5);
     }
 };

@@ -1,2 +1,6 @@
+Version 1.1
+- Support "q" (search query) parameter.
+- Provide a default zoom value when not present in geo URI.
+
 Version 1.0
 - Initial release.

@@ -6,18 +6,17 @@ Supported destination map sites:
 * Google Maps (planned)
 * Bing Maps (planned)
 
-Supported URIs:
+Supported URI examples:
 * `geo:latitude,longitude`
 * `geo:latitude,longitude?z=zoom`
 * `geo:latitude,longitude;z=zoom`
-* `geo:latitude,longitude?q=search+query` (planned)
-* `geo:latitude,longitude;q=search+query` (planned)
+* `geo:latitude,longitude?q=search+query`
 * Combinations of `z` and `q` are allowed with either `?` and `&` (Android/deprecated) or `;` (new) delimiters
 
 Ignored parameters:
 * `crs` (always treated as wgs84)
 * `u` (always ignored)
-* `geo:latitude,longitude,altitude` (URIs with this 3rd parameter present are still accepted, but altitude is ignored)
+* `geo:latitude,longitude,altitude` (altitude is ignored)
 
 Supported browsers:
 * Firefox 59+
