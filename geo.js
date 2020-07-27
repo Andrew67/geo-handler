@@ -1,6 +1,6 @@
 /*! geo-handler | https://github.com/Andrew67/geo-handler */
 /*
-    Copyright (c) 2018 Andrés Cordero
+    Copyright (c) 2018-2020 Andrés Cordero
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ const GeoUri = {
         // Strip out "geo:" scheme
         const uriContents = uri.substr(this.GEO_URI_PREFIX.length);
 
-        // uri is now "17.65,-30.43?z=4.3"
+        // uri is now "17.65,-30.43?z=4.3&q=local+business"
         // Split out the coordinates from the parameters
         const [rawLatLng, ...rawParameters] = uriContents.split(this.PARAMETER_SEPARATOR);
 
@@ -72,11 +72,15 @@ const GeoUri = {
 
     /** Takes a {@type GeoLocation} object and returns an OpenStreetMap URL */
     toOpenStreetMapUrl: function (geoLocation) {
+        const latitude = geoLocation.latitude.toFixed(5),
+            longitude = geoLocation.longitude.toFixed(5);
         return 'https://www.openstreetmap.org/' + // base URL
             (geoLocation.searchQuery !== null ? // search query
-                'search?query=' + encodeURIComponent(geoLocation.searchQuery) : '') +
+                'search?query=' + encodeURIComponent(geoLocation.searchQuery) :
+                // if there is no search query, place a marker at the given location
+                '?mlat=' + latitude + '&mlon=' + longitude) +
             '#map=' + // map location (lat,lng,zoom)
             (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM) + '/' +
-            geoLocation.latitude.toFixed(5) + '/' + geoLocation.longitude.toFixed(5);
+            latitude + '/' + longitude;
     }
 };

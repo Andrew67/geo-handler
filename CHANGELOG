@@ -1,3 +1,7 @@
+Version 1.2
+- When there is no "q" (search query) parameter, show a marker at the given location.
+- Increased minimum supported Firefox version to 68 (current ESR).
+
 Version 1.1
 - Support "q" (search query) parameter.
 - Provide a default zoom value when not present in geo URI.

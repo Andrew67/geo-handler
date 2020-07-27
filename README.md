@@ -3,15 +3,18 @@ Open `geo:` URIs in your preferred maps website
 
 Supported destination map sites:
 * OpenStreetMap
+* Qwant Maps (planned)
 * Google Maps (planned)
 * Bing Maps (planned)
+* Apple Maps (planned)
 
 Supported URI examples:
-* `geo:latitude,longitude`
-* `geo:latitude,longitude?z=zoom`
-* `geo:latitude,longitude;z=zoom`
-* `geo:latitude,longitude?q=search+query`
-* Combinations of `z` and `q` are allowed with either `?` and `&` (Android/deprecated) or `;` (new) delimiters
+* `geo:latitude,longitude` - displays the given coordinates and places a marker at them
+* `geo:latitude,longitude?z=zoom` - overrides the default zoom
+* `geo:latitude,longitude;z=zoom` - same as above
+* `geo:latitude,longitude?q=search+query` - performs the given search query around the given coordinates
+  (a marker is not displayed for the coordinates)
+* Combinations of `z` and `q` are allowed with either `?` and `&` (Android/unofficial) or `;` (official) delimiters
 
 Ignored parameters:
 * `crs` (always treated as wgs84)
@@ -19,12 +22,14 @@ Ignored parameters:
 * `geo:latitude,longitude,altitude` (altitude is ignored)
 
 Supported browsers:
-* Firefox 59+
+* Firefox 68+
 * Android already natively [partially supports `geo:` URIs](https://developer.android.com/guide/appendix/g-app-intents.html)
+  * Support varies by app, and Firefox for Android passes the URI directly to the OS, so this extension is not compatible
 
 Licenses:
 * Code: MIT (see LICENSE file)
-* Icon: [Globe](https://thenounproject.com/search/?q=globe&i=1368249) by [Randomhero](https://thenounproject.com/rahedesigns) from the [Noun Project](https://thenounproject.com/)
+* Icon: [Globe](https://thenounproject.com/search/?q=globe&i=1368249) by
+  [Randomhero](https://thenounproject.com/rahedesigns) from the [Noun Project](https://thenounproject.com/)
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR

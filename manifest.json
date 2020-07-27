@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Geo URI Handler",
-  "version": "1.1",
+  "version": "1.2",
   "author": "Andrew67 Software",
   "homepage_url": "https://github.com/Andrew67/geo-handler",
   "description": "Open `geo:` URIs in your preferred maps website. Globe by Randomhero from the Noun Project",
@@ -13,7 +13,7 @@
   "applications": {
     "gecko": {
       "id": "geo-handler@andrew67.com",
-      "strict_min_version": "59.0"
+      "strict_min_version": "68.0"
     }
   },
   "protocol_handlers": [{
