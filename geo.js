@@ -26,7 +26,15 @@ function GeoLocation () {
     this.searchQuery = null;
 }
 GeoLocation.fromUri = function (uri) { return GeoUri.parse(uri); };
-GeoLocation.prototype.toOpenStreetMapUrl = function () { return GeoUri.toOpenStreetMapUrl(this); };
+GeoLocation.prototype.toMapsUrl = function (provider) {
+    switch(provider) {
+        case 'osm':
+            return GeoUri.toOpenStreetMapUrl(this);
+        case 'qwant':
+        default:
+            return GeoUri.toQwantMapsUrl(this);
+    }
+};
 
 const GeoUri = {
     GEO_URI_PREFIX: 'geo:',
@@ -81,6 +89,20 @@ const GeoUri = {
                 '?mlat=' + latitude + '&mlon=' + longitude) +
             '#map=' + // map location (lat,lng,zoom)
             (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM) + '/' +
+            latitude + '/' + longitude;
+    },
+
+    /** Takes a {@type GeoLocation} object and returns a Qwant Maps URL */
+    toQwantMapsUrl: function (geoLocation) {
+        const latitude = geoLocation.latitude.toFixed(5),
+            longitude = geoLocation.longitude.toFixed(5);
+        return 'https://www.qwant.com/maps/' + // base URL
+            (geoLocation.searchQuery !== null ? // search query
+                'places/?q=' + encodeURIComponent(geoLocation.searchQuery) :
+                // if there is no search query, place a marker at the given location
+                'place/latlon:' + latitude + ':' + longitude) +
+            '#map=' + // map location (lat,lng,zoom)
+            (geoLocation.zoom !== null ? geoLocation.zoom.toFixed(2) : this.DEFAULT_ZOOM) + '/' +
             latitude + '/' + longitude;
     }
 };

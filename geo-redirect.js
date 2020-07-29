@@ -1,6 +1,6 @@
 /*! geo-handler | https://github.com/Andrew67/geo-handler */
 /*
-    Copyright (c) 2018 Andrés Cordero
+    Copyright (c) 2018-2020 Andrés Cordero
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,5 +19,9 @@
 "use strict";
 // Extract geo URI from location hash
 const geoUri = decodeURIComponent(location.hash.substr(1));
-// Redirect to OpenStreetMap
-location.href = GeoLocation.fromUri(geoUri).toOpenStreetMapUrl();
+// Redirect to user-selected maps website
+browser.storage.sync.get('maps')
+    .catch(() => { return {}; })
+    .then(prefs => {
+        location.href = GeoLocation.fromUri(geoUri).toMapsUrl(prefs.maps || 'qwant');
+    });

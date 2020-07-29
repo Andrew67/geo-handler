@@ -1,3 +1,7 @@
+Version 2.0
+- Added support for Qwant Maps, which is now the default.
+- Added a preferences screen for selecting between map providers.
+
 Version 1.2
 - When there is no "q" (search query) parameter, show a marker at the given location.
 - Increased minimum supported Firefox version to 68 (current ESR).
