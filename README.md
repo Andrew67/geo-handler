@@ -2,11 +2,11 @@
 Open `geo:` URIs in your preferred maps website
 
 Supported destination map sites:
+* Qwant Maps (default)
 * OpenStreetMap
-* Qwant Maps (planned)
 * Google Maps (planned)
 * Bing Maps (planned)
-* Apple Maps (planned)
+* Apple Maps (macOS only)
 
 Supported URI examples:
 * `geo:latitude,longitude` - displays the given coordinates and places a marker at them

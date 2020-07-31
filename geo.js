@@ -30,6 +30,8 @@ GeoLocation.prototype.toMapsUrl = function (provider) {
     switch(provider) {
         case 'osm':
             return GeoUri.toOpenStreetMapUrl(this);
+        case 'apple':
+            return GeoUri.toAppleMapsUrl(this);
         case 'qwant':
         default:
             return GeoUri.toQwantMapsUrl(this);
@@ -46,7 +48,7 @@ const GeoUri = {
 
     /** Parses a URI of the form "geo:..." and returns a {@type GeoLocation} object */
     parse: function (uri) {
-        if (!uri.startsWith(this.GEO_URI_PREFIX)) throw 'Not a "geo:" URI: ' + uri;
+        if (!uri.startsWith(this.GEO_URI_PREFIX)) throw `Not a "geo:" URI: ${uri}`;
 
         // Assuming an example URI of "geo:17.65,-30.43?z=4.3&q=local+business"
         // Strip out "geo:" scheme
@@ -84,9 +86,9 @@ const GeoUri = {
             longitude = geoLocation.longitude.toFixed(5);
         return 'https://www.openstreetmap.org/' + // base URL
             (geoLocation.searchQuery !== null ? // search query
-                'search?query=' + encodeURIComponent(geoLocation.searchQuery) :
+                `search?query=${encodeURIComponent(geoLocation.searchQuery)}` :
                 // if there is no search query, place a marker at the given location
-                '?mlat=' + latitude + '&mlon=' + longitude) +
+                `?mlat=${latitude}&mlon=${longitude}`) +
             '#map=' + // map location (lat,lng,zoom)
             (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM) + '/' +
             latitude + '/' + longitude;
@@ -98,11 +100,24 @@ const GeoUri = {
             longitude = geoLocation.longitude.toFixed(5);
         return 'https://www.qwant.com/maps/' + // base URL
             (geoLocation.searchQuery !== null ? // search query
-                'places/?q=' + encodeURIComponent(geoLocation.searchQuery) :
+                `places/?q=${encodeURIComponent(geoLocation.searchQuery)}` :
                 // if there is no search query, place a marker at the given location
-                'place/latlon:' + latitude + ':' + longitude) +
+                `place/latlon:${latitude}:${longitude}`) +
             '#map=' + // map location (lat,lng,zoom)
             (geoLocation.zoom !== null ? geoLocation.zoom.toFixed(2) : this.DEFAULT_ZOOM) + '/' +
             latitude + '/' + longitude;
+    },
+
+    /** Takes a {@type GeoLocation} object and returns an Apple Maps URL */
+    toAppleMapsUrl: function (geoLocation) {
+        const latitude = geoLocation.latitude.toFixed(5),
+            longitude = geoLocation.longitude.toFixed(5);
+        return 'https://maps.apple.com/?' + // base URL
+            (geoLocation.searchQuery !== null ? // search query
+                `sll=${latitude},${longitude}&q=${encodeURIComponent(geoLocation.searchQuery)}`:
+                // if there is no search query, place a marker at the given location
+                `ll=${latitude},${longitude}&q=Marker`) +
+            // zoom
+            '&z=' + (geoLocation.zoom !== null ? geoLocation.zoom.toFixed(2) : this.DEFAULT_ZOOM);
     }
 };
