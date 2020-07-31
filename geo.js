@@ -30,6 +30,8 @@ GeoLocation.prototype.toMapsUrl = function (provider) {
     switch(provider) {
         case 'osm':
             return GeoUri.toOpenStreetMapUrl(this);
+        case 'gmaps':
+            return GeoUri.toGoogleMapsUrl(this);
         case 'apple':
             return GeoUri.toAppleMapsUrl(this);
         case 'qwant':
@@ -89,6 +91,7 @@ const GeoUri = {
                 `search?query=${encodeURIComponent(geoLocation.searchQuery)}` :
                 // if there is no search query, place a marker at the given location
                 `?mlat=${latitude}&mlon=${longitude}`) +
+            // TODO: Don't print out in case of 0,0 input, as relative queries get centered around it
             '#map=' + // map location (lat,lng,zoom)
             (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM) + '/' +
             latitude + '/' + longitude;
@@ -103,9 +106,25 @@ const GeoUri = {
                 `places/?q=${encodeURIComponent(geoLocation.searchQuery)}` :
                 // if there is no search query, place a marker at the given location
                 `place/latlon:${latitude}:${longitude}`) +
+            // TODO: Don't print out in case of 0,0 input, as relative queries get centered around it
             '#map=' + // map location (lat,lng,zoom)
             (geoLocation.zoom !== null ? geoLocation.zoom.toFixed(2) : this.DEFAULT_ZOOM) + '/' +
             latitude + '/' + longitude;
+    },
+
+    /** Takes a {@type GeoLocation} object and returns a Google Maps URL */
+    toGoogleMapsUrl: function (geoLocation) {
+        const latitude = geoLocation.latitude.toFixed(5),
+            longitude = geoLocation.longitude.toFixed(5);
+        return 'https://www.google.com/maps/search/' + // base URL
+            (geoLocation.searchQuery !== null ? // search query
+                encodeURI(geoLocation.searchQuery) :
+                // if there is no search query, place a marker at the given location
+                `${latitude},${longitude}`) +
+            // map location (lat,lng,zoom)
+            // TODO: Don't print out in case of 0,0 input, as relative queries get centered around it
+            `/@${latitude},${longitude},` +
+            (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM) + 'z';
     },
 
     /** Takes a {@type GeoLocation} object and returns an Apple Maps URL */
@@ -114,6 +133,7 @@ const GeoUri = {
             longitude = geoLocation.longitude.toFixed(5);
         return 'https://maps.apple.com/?' + // base URL
             (geoLocation.searchQuery !== null ? // search query
+                // TODO: Don't set sll in case of 0,0 input, as relative queries get centered around it
                 `sll=${latitude},${longitude}&q=${encodeURIComponent(geoLocation.searchQuery)}`:
                 // if there is no search query, place a marker at the given location
                 `ll=${latitude},${longitude}&q=Marker`) +
