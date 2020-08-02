@@ -93,10 +93,12 @@ const GeoUri = {
                 `search?query=${encodeURIComponent(geoLocation.searchQuery)}` :
                 // if there is no search query, place a marker at the given location
                 `?mlat=${latitude}&mlon=${longitude}`) +
-            // TODO: Don't print out in case of 0,0 input, as relative queries get centered around it
-            '#map=' + // map location (lat,lng,zoom)
-            (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM) + '/' +
-            latitude + '/' + longitude;
+            // Don't print out in case of 0,0 input, as relative queries get centered around it
+            (geoLocation.latitude || geoLocation.longitude ?
+                '#map=' + // map location (lat,lng,zoom)
+                (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM) + '/' +
+                latitude + '/' + longitude
+            : '');
     },
 
     /** Takes a {@type GeoLocation} object and returns a Qwant Maps URL */
@@ -108,10 +110,12 @@ const GeoUri = {
                 `places/?q=${encodeURIComponent(geoLocation.searchQuery)}` :
                 // if there is no search query, place a marker at the given location
                 `place/latlon:${latitude}:${longitude}`) +
-            // TODO: Don't print out in case of 0,0 input, as relative queries get centered around it
-            '#map=' + // map location (lat,lng,zoom)
-            (geoLocation.zoom !== null ? geoLocation.zoom.toFixed(2) : this.DEFAULT_ZOOM) + '/' +
-            latitude + '/' + longitude;
+            // Don't print out in case of 0,0 input, as relative queries get centered around it
+            (geoLocation.latitude || geoLocation.longitude ?
+                '#map=' + // map location (lat,lng,zoom)
+                (geoLocation.zoom !== null ? geoLocation.zoom.toFixed(2) : this.DEFAULT_ZOOM) + '/' +
+                latitude + '/' + longitude
+                : '');
     },
 
     /** Takes a {@type GeoLocation} object and returns a Google Maps URL */
@@ -124,17 +128,20 @@ const GeoUri = {
                 // if there is no search query, place a marker at the given location
                 `${latitude},${longitude}`) +
             // map location (lat,lng,zoom)
-            // TODO: Don't print out in case of 0,0 input, as relative queries get centered around it
-            `/@${latitude},${longitude},` +
-            (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM) + 'z';
+            // Don't print out in case of 0,0 input, as relative queries get centered around it
+            (geoLocation.latitude || geoLocation.longitude ?
+                `/@${latitude},${longitude},` +
+                (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM) + 'z'
+                : '');
     },
 
     /** Takes a {@type GeoLocation} object and returns a Bing Maps URL */
     toBingMapsUrl: function (geoLocation) {
         const latitude = geoLocation.latitude.toFixed(5),
             longitude = geoLocation.longitude.toFixed(5);
-        // TODO: Don't set sll in case of 0,0 input, as relative queries get centered around it
-        return `https://bing.com/maps/default.aspx?where1=${latitude},${longitude}` + // base URL + center point
+        return 'https://bing.com/maps/default.aspx?' +
+            // center point (don't print out in case of 0,0, as relative queries get centered around it)
+            (geoLocation.latitude || geoLocation.longitude ? `where1=${latitude},${longitude}` : '') +
             // search query
             (geoLocation.searchQuery !== null ? `&ss=${encodeURIComponent(geoLocation.searchQuery)}` : '') +
             // zoom
@@ -148,8 +155,9 @@ const GeoUri = {
             longitude = geoLocation.longitude.toFixed(5);
         return 'https://maps.apple.com/?' + // base URL
             (geoLocation.searchQuery !== null ? // search query
-                // TODO: Don't set sll in case of 0,0 input, as relative queries get centered around it
-                `sll=${latitude},${longitude}&q=${encodeURIComponent(geoLocation.searchQuery)}`:
+                // Don't set sll in case of 0,0 input, as relative queries get centered around it
+                (geoLocation.latitude || geoLocation.longitude ? `sll=${latitude},${longitude}` : '') +
+                `&q=${encodeURIComponent(geoLocation.searchQuery)}`:
                 // if there is no search query, place a marker at the given location
                 `ll=${latitude},${longitude}&q=Marker`) +
             // zoom

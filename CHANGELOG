@@ -1,7 +1,8 @@
 Version 2.0
 - Added support for Qwant Maps, which is now the default.
 - Added a preferences screen for selecting between map providers.
-- Added non-default map providers: Apple Maps (macOS only).
+- Added non-default map providers: Google Maps, Bing Maps, Apple Maps (macOS only).
+- Added support for relative search queries when latitude and longitude both set to 0.
 
 Version 1.2
 - When there is no "q" (search query) parameter, show a marker at the given location.

@@ -14,6 +14,7 @@ Supported URI examples:
 * `geo:latitude,longitude;z=zoom` - same as above
 * `geo:latitude,longitude?q=search+query` - performs the given search query around the given coordinates
   (a marker is not displayed for the coordinates)
+* `geo:0,0?q=search+query` - uses the current or last viewed location as the center point for the search
 * Combinations of `z` and `q` are allowed with either `?` and `&` (Android/unofficial) or `;` (official) delimiters
 
 Ignored parameters:
