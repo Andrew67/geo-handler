@@ -32,6 +32,8 @@ GeoLocation.prototype.toMapsUrl = function (provider) {
             return GeoUri.toOpenStreetMapUrl(this);
         case 'gmaps':
             return GeoUri.toGoogleMapsUrl(this);
+        case 'bing':
+            return GeoUri.toBingMapsUrl(this);
         case 'apple':
             return GeoUri.toAppleMapsUrl(this);
         case 'qwant':
@@ -125,6 +127,19 @@ const GeoUri = {
             // TODO: Don't print out in case of 0,0 input, as relative queries get centered around it
             `/@${latitude},${longitude},` +
             (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM) + 'z';
+    },
+
+    /** Takes a {@type GeoLocation} object and returns a Bing Maps URL */
+    toBingMapsUrl: function (geoLocation) {
+        const latitude = geoLocation.latitude.toFixed(5),
+            longitude = geoLocation.longitude.toFixed(5);
+        // TODO: Don't set sll in case of 0,0 input, as relative queries get centered around it
+        return `https://bing.com/maps/default.aspx?where1=${latitude},${longitude}` + // base URL + center point
+            // search query
+            (geoLocation.searchQuery !== null ? `&ss=${encodeURIComponent(geoLocation.searchQuery)}` : '') +
+            // zoom
+            '&lvl=' + (geoLocation.zoom !== null ? Math.round(geoLocation.zoom) : this.DEFAULT_ZOOM);
+
     },
 
     /** Takes a {@type GeoLocation} object and returns an Apple Maps URL */

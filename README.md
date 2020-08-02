@@ -4,8 +4,8 @@ Open `geo:` URIs in your preferred maps website
 Supported destination map sites:
 * Qwant Maps (default)
 * OpenStreetMap
-* Google Maps (planned)
-* Bing Maps (planned)
+* Google Maps
+* Bing Maps
 * Apple Maps (macOS only)
 
 Supported URI examples:
