@@ -7,6 +7,8 @@ Supported destination map sites:
 * Google Maps
 * Bing Maps
 * Apple Maps (macOS only)
+* GeoHack
+* MapCompare
 
 Supported URI examples:
 * `geo:latitude,longitude` - displays the given coordinates and places a marker at them
