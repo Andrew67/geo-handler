@@ -36,6 +36,10 @@ GeoLocation.prototype.toMapsUrl = function (provider) {
             return GeoUri.toBingMapsUrl(this);
         case 'apple':
             return GeoUri.toAppleMapsUrl(this);
+        case 'geohack':
+            return GeoUri.toGeoHackUrl(this);
+        case 'mapcompare':
+            return GeoUri.toMapCompareUrl(this);
         case 'qwant':
         default:
             return GeoUri.toQwantMapsUrl(this);
@@ -162,5 +166,22 @@ const GeoUri = {
                 `ll=${latitude},${longitude}&q=Marker`) +
             // zoom
             '&z=' + (geoLocation.zoom !== null ? geoLocation.zoom.toFixed(2) : this.DEFAULT_ZOOM);
+    },
+
+    /** Takes a {@type GeoLocation} object and returns a GeoHack URL */
+    toGeoHackUrl: function (geoLocation) {
+        const latitude = geoLocation.latitude.toFixed(4),
+            longitude = geoLocation.longitude.toFixed(4);
+        return `https://geohack.toolforge.org/geohack.php?params=${latitude}_N_${longitude}_E`;
+    },
+
+    /** Takes a {@type GeoLocation} object and returns a MapCompare URL */
+    toMapCompareUrl: function (geoLocation) {
+        const latitude = geoLocation.latitude.toFixed(4),
+            longitude = geoLocation.longitude.toFixed(4);
+        return 'https://tools.geofabrik.de/mc/#' + // base URL
+                // Same format as OSM (zoom with no default on their end / lat / lng)
+                (geoLocation.zoom !== null ? geoLocation.zoom.toFixed(2) : this.DEFAULT_ZOOM) + '/' +
+                latitude + '/' + longitude;
     }
 };

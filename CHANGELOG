@@ -1,3 +1,6 @@
+Version 2.1
+- Added support for the GeoHack and MapCompare tools.
+
 Version 2.0
 - Added support for Qwant Maps, which is now the default.
 - Added a preferences screen for selecting between map providers.
