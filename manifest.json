@@ -1,7 +1,7 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Geo URI Handler",
-  "version": "3.0",
+  "version": "3.1",
   "author": "Andrew67 Software",
   "homepage_url": "https://github.com/Andrew67/geo-handler",
   "description": "Open `geo:` URIs in your preferred maps website. Globe by Randomhero from the Noun Project",
