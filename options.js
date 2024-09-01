@@ -10,7 +10,10 @@ function saveOptions(e) {
 async function restoreOptions() {
     try {
         const result = await browser.storage.sync.get("maps");
-        document.querySelector("#maps").value = result.maps || "qwant";
+        let selectedMaps = result.maps || "osm";
+        // Pre v3 users may have selected Qwant Maps which no longer exists
+        if (selectedMaps === "qwant") selectedMaps = "osm";
+        document.querySelector("#maps").value = selectedMaps;
     } catch (error) {
         console.log(`Error: ${error}`);
     }

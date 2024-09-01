@@ -2,10 +2,10 @@
 Open `geo:` URIs in your preferred maps website
 
 Supported destination map sites:
-* Qwant Maps (default)
-* OpenStreetMap
+* OpenStreetMap (default)
 * Google Maps
 * Bing Maps
+* Apple Maps (Beta)
 * Apple Maps (macOS only)
 * GeoHack
 * MapCompare
@@ -25,7 +25,7 @@ Ignored parameters:
 * `geo:latitude,longitude,altitude` (altitude is ignored)
 
 Supported browsers:
-* Firefox 68+
+* Firefox 128+
 * Android already natively [partially supports `geo:` URIs](https://developer.android.com/guide/appendix/g-app-intents.html)
   * Support varies by app, and Firefox for Android passes the URI directly to the OS, so this extension is not compatible
 

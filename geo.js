@@ -1,6 +1,6 @@
 /*! geo-handler | https://github.com/Andrew67/geo-handler */
 /*
-    Copyright (c) 2018-2020 Andrés Cordero
+    Copyright (c) 2018-2024 Andrés Cordero
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,21 +28,21 @@ function GeoLocation () {
 GeoLocation.fromUri = function (uri) { return GeoUri.parse(uri); };
 GeoLocation.prototype.toMapsUrl = function (provider) {
     switch(provider) {
-        case 'osm':
-            return GeoUri.toOpenStreetMapUrl(this);
         case 'gmaps':
             return GeoUri.toGoogleMapsUrl(this);
         case 'bing':
             return GeoUri.toBingMapsUrl(this);
+        case 'apple-beta':
+            return GeoUri.toAppleMapsUrl(this, true);
         case 'apple':
             return GeoUri.toAppleMapsUrl(this);
         case 'geohack':
             return GeoUri.toGeoHackUrl(this);
         case 'mapcompare':
             return GeoUri.toMapCompareUrl(this);
-        case 'qwant':
+        case 'osm':
         default:
-            return GeoUri.toQwantMapsUrl(this);
+            return GeoUri.toOpenStreetMapUrl(this);
     }
 };
 
@@ -154,10 +154,11 @@ const GeoUri = {
     },
 
     /** Takes a {@type GeoLocation} object and returns an Apple Maps URL */
-    toAppleMapsUrl: function (geoLocation) {
+    toAppleMapsUrl: function (geoLocation, beta) {
         const latitude = geoLocation.latitude.toFixed(5),
             longitude = geoLocation.longitude.toFixed(5);
-        return 'https://maps.apple.com/?' + // base URL
+        const hostname = beta ? 'beta.maps.apple.com' : 'maps.apple.com';
+        return 'https://' + hostname + '/?' + // base URL
             (geoLocation.searchQuery !== null ? // search query
                 // Don't set sll in case of 0,0 input, as relative queries get centered around it
                 (geoLocation.latitude || geoLocation.longitude ? `sll=${latitude},${longitude}` : '') +
